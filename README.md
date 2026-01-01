@@ -1,5 +1,4 @@
 # MatPak
----
 Matrix Utilization Python Package.
 
 ![MatPak](https://github.com/user-attachments/assets/3fb0d588-3070-4aec-a418-73d369474562)
