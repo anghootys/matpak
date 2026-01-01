@@ -32,4 +32,4 @@ if __name__ == "__main__":
 
 ## Contribution
 Feel free to fork, modify and open a pull request in this repository.
-Thanks for you
+Thanks for your contribution.
