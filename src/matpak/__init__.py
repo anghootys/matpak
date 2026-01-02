@@ -1,6 +1,4 @@
 from .io import imp_mat_file, imp_vec_file
-from .errors import *
-
 from .mat import Matrix
 from .vec import Vector
 
@@ -12,11 +10,4 @@ __all__ = [
 
     # classes
     "Matrix", "Vector",
-
-    # types
-    "lst_dec_1d_t", "lst_dec_2d_t",
-
-    # error types
-    "MatrixFileInvalid", "MatrixDimensionInvalid",
-    "VectorFileInvalid", "VectorDimensionInvalid"
 ]

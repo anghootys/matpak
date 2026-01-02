@@ -45,6 +45,11 @@ Ran 18 tests in 0.048s
 OK
 ```
 
+## Examples
+`tests/` directory contains tests that are also best examples to inspire from.
+all public APIs tested and all names (function names, variable name, etc...) are clear
+to find out what is going on.
+
 ## Contribution
 Feel free to fork, modify and open a pull request in this repository.
 Thanks for your contribution.

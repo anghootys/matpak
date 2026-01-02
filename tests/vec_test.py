@@ -2,7 +2,7 @@ import unittest
 from decimal import Decimal
 
 import matpak
-from matpak import VectorDimensionInvalid
+from matpak.errors import VectorDimensionInvalid
 
 
 class TestVector(unittest.TestCase):
@@ -52,6 +52,20 @@ class TestVector(unittest.TestCase):
 
         self.assertAlmostEqual(vec.get(15), Decimal(0.0000000000005), 32)
         self.assertNotAlmostEqual(vec.get(15), Decimal(0.00000000000005), 32)
+
+    def test_vec_multiply(self):
+        vec_01 = matpak.Vector(3, [Decimal(1.0), Decimal(2.0), Decimal(3.0)])
+        mat_01 = matpak.Matrix(1, 3, [
+            [Decimal(10.0), Decimal(11.0), Decimal(12.0)]
+        ])
+
+        mat_02 = vec_01.multiply(mat_01)
+
+        self.assertListEqual(mat_02.raw, [
+            [Decimal(10.0), Decimal(11.0), Decimal(12.0)],
+            [Decimal(20.0), Decimal(22.0), Decimal(24.0)],
+            [Decimal(30.0), Decimal(33.0), Decimal(36.0)],
+        ])
 
 
 if __name__ == "__main__":

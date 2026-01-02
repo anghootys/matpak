@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from .errors import MatrixDimensionInvalid
+from .errors import MatrixDimensionInvalid, MultiplicationDimensionMismatched
 from .types import lst_dec_2d_t
 
 
@@ -70,7 +70,82 @@ class Matrix:
         :return: Decimal
         """
 
-        if row > self.__rows or col > self.__cols:
+        if row > self.__rows-1 or col > self.__cols-1 or row < 0 or col < 0:
             raise ValueError(f"address {row}*{col} is not in boundaries of matrix {self.__rows}*{self.__cols}")
 
         return self.__raw_mat[row][col]
+
+    # multiplication methods
+
+    def multiply(self, rhs: "Matrix | Vector") -> "Matrix | Vector":
+        """
+        multiply row-major one matrix and other matrix or vector. return type is analogous to rhs type.
+
+        :param rhs: right hand side, could be Matrix or Vector but dimensions of rhs should be valid for multiplication.
+        :return: Matrix or Vector based on rhs type (if rhs is matrix, result would be matrix too, but if rhs is vector, result would be the vector too)
+        """
+
+        from .vec import Vector
+        self_shape = self.shape
+
+        if self_shape[1] != rhs.shape[0]:
+            raise MultiplicationDimensionMismatched(self_shape, rhs.shape)
+
+        if isinstance(rhs, Matrix):
+            res: Matrix = Matrix(self_shape[0], rhs.shape[1])
+
+            for k in range(rhs.shape[1]):
+                for i in range(self_shape[0]):
+                    for j in range(self_shape[1]):
+                        tmp = res.get(i, k)
+                        tmp += self.get(i, j) * rhs.get(j, k)
+                        res.set(i, k, tmp)
+
+            return res
+        else:
+             res: Vector = Vector(self_shape[1])
+
+             for i in range(self_shape[0]):
+                 for j in range(self_shape[1]):
+                     tmp = res.get(i)
+                     tmp += self.get(i, j) * rhs.get(j)
+                     res.set(i, tmp)
+
+             return res
+
+    def multiply_col_major(self, rhs: "Matrix | Vector") -> "Matrix | Vector":
+        """
+        multiply col-major one matrix and other matrix or vector. return type is analogous to rhs type.
+
+        :param rhs: right hand side, could be Matrix or Vector but dimensions of rhs should be valid for multiplication.
+        :return: Matrix or Vector based on rhs type (if rhs is matrix, result would be matrix too, but if rhs is vector, result would be the vector too)
+        """
+
+        from .vec import Vector
+        self_shape = self.shape
+
+        if self_shape[1] != rhs.shape[0]:
+            raise MultiplicationDimensionMismatched(self_shape, rhs.shape)
+
+        self_shape = self.shape
+        if isinstance(rhs, Matrix):
+            res: Matrix = Matrix(self_shape[0], rhs.shape[1])
+
+            for k in range(rhs.shape[1]):
+                for j in range(self_shape[1]):
+                    for i in range(self_shape[0]):
+                        tmp = res.get(i, k)
+                        tmp += self.get(i, j) * rhs.get(j, k)
+                        res.set(i, k, tmp)
+
+            return res
+        else:
+            res: Vector = Vector(self_shape[1])
+
+            for j in range(self_shape[1]):
+                for i in range(self_shape[1]):
+                    tmp = res.get(i)
+                    tmp += self.get(i, j) * rhs.get(j)
+                    res.set(i, tmp)
+
+            return res
