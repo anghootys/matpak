@@ -1,13 +1,67 @@
-from ctypes import c_uint32
+from decimal import Decimal
+
+from .errors import VectorDimensionInvalid
 from .types import lst_dec_1d_t
 
 
 class Vector:
-    def __init__(self, rows: c_uint32, init_vec: lst_dec_1d_t | None = None):
+    def __init__(self, rows: int, init_vec: lst_dec_1d_t | None = None):
         """
         initialize a rows count vector and init_vec list
 
         :param rows: vector rows count.
         :param init_vec: initial values for vector; or None as default for zero vector.
         """
-        pass
+        if rows <= 0:
+            raise VectorDimensionInvalid(f"vector with {rows} rows is invalid.")
+
+        self.__rows = rows
+
+        if init_vec is None:
+            self.__raw_vec: lst_dec_1d_t = [Decimal(0.0)] * rows
+        else:
+            self.__raw_vec: lst_dec_1d_t = init_vec
+
+    @property
+    def shape(self) -> tuple[int, int]:
+        """
+        get vector rows.
+
+        :return: a tuple of vector rows*1
+        """
+        return self.__rows, 1
+
+    @property
+    def raw(self) -> lst_dec_1d_t:
+        """
+        get raw vector 1D list of Decimal values.
+
+        :return: lst_dec_1d_t
+        """
+        return self.__raw_vec
+
+    def set(self, row: int, val: Decimal):
+        """
+        store 'val' in vector[row] address.
+
+        :param row: number of row.
+        :param val: value to be stored inside vector[row] address.
+        """
+
+        if row > self.__rows or row < 0:
+            raise ValueError(f"address {row} is not in boundaries of vector with {self.__rows} rows")
+
+        self.__raw_vec[row] = val
+
+    def get(self, row: int) -> Decimal:
+        """
+        get value of vector[row] address.
+
+        :param row: number of row.
+        :return: Decimal
+        """
+
+        if row > self.__rows:
+            raise ValueError(f"address {row} is not in boundaries of vector with {self.__rows} rows")
+
+        return self.__raw_vec[row]

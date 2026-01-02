@@ -30,6 +30,21 @@ if __name__ == "__main__":
     main()
 ```
 
+## Test
+To execute unit tests, from root dir:
+```bash
+python -m unittest discover -s tests -p "*_test.py"
+```
+
+on successful test:
+```bash
+..................
+----------------------------------------------------------------------
+Ran 18 tests in 0.048s
+
+OK
+```
+
 ## Contribution
 Feel free to fork, modify and open a pull request in this repository.
 Thanks for your contribution.
